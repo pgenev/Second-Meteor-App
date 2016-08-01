@@ -49,7 +49,7 @@ if(Meteor.isClient){
 		},
 		'keyup [name=todoItem]': function(event){
 			    if(event.which == 13 || event.which == 27){
-			    	$(event.target).blur();
+			    		$(event.target).blur();
 			    }
 			    else{
 			    	var documentId = this._id;

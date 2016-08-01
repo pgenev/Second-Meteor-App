@@ -16,7 +16,6 @@
 .checked [name=todoItem]{
 	text-decoration: line-through;
 }
-
 .checked [name=todoItem],
 .checked [name=todoItem]:hover,
 .checked [name=todoItem]:focus{

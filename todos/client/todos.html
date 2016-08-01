@@ -16,9 +16,9 @@
 </template>
 
 <template name="todoItem">
-	<li class="checked">
+	<li class="{{checked}}">
 		<input type="checkbox" {{checked}}>
-		<input type="text" value="{{name}}" name="todoItem">
+			<input type="text" value="{{name}}" name="todoItem">
 		[<a href="#" class="delete_todo">Delete</a>]
 	</li>
 </template>
