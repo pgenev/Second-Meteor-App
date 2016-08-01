@@ -1,3 +1,7 @@
+Router.route('/register');
+Router.route('/login');
+Router.route('/' , {template: 'home'});
+
 if(Meteor.isClient){
 	Template.todos.helpers({
 		'todo' : function(){
