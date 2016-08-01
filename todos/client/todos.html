@@ -1,6 +1,6 @@
-<tempalte name="home">
+<template name="home">
 	<p>Welcome to the Todos application.</p>
-</tempalte>;
+</template>
 
 <template name="todos">
 	{{> addTodo}}
@@ -35,8 +35,19 @@
 
 <template name="register">
 	<h2>Register</h2>
+	<form class="register">
+    	<p>Email: <input type="email" name="email"></p>
+    	<p>Password: <input type="password" name="password"></p>
+    	<p><input type="submit" value="Register"></p>
+	</form>
 </template>
 
 <template name="login">
 	<h2>Login</h2>
+	<form class="login">
+		<p>Email: <input type="email" name="email"></p>
+		<p>Password: <input type="password" name="password"></p>
+		<p><input type="submit" value="Login"></p>
+	</form>
 </template>
+

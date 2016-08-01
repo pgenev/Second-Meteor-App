@@ -1,11 +1,26 @@
+Router.configure({
+	layoutTemplate: 'main'
+});
 Router.route('/register');
 Router.route('/login');
-Router.route('/' , {template: 'home'});
+Router.route('/' , { 
+	name: 'home', 
+	template: 'home'
+});
+Router.route('/list/:_id', {
+	name: 'listPage',
+	template: 'listPage',
+	data: function(){
+		var currentList = this.params._id;
+		return Lists.findOne({_id: currentList});
+	}
+});
 
 if(Meteor.isClient){
 	Template.todos.helpers({
 		'todo' : function(){
-			return Todos.find({}, {sort: {createdAt: -1}});
+			var currentList = this._id;
+			return Todos.find({listId : currentList}, {sort: {createdAt: -1}});
 		}
 	});
 
@@ -13,10 +28,12 @@ if(Meteor.isClient){
 		'submit form': function(event){
 			event.preventDefault();
 			var todoName = $('[name="todoName"]').val();
+			var currentList = this._id;
 			Todos.insert({
 				name: todoName,
 				completed: false,
-				createdAt: new Date()
+				createdAt: new Date(),
+				listId: currentList
 			});
 			$('[name="todoName"]').val('');
 		}
@@ -35,10 +52,12 @@ if(Meteor.isClient){
 
 	Template.todosCount.helpers({
 		'totalTodos' : function() {
-			return Todos.find().count();
+			var currentList = this._id;
+			return Todos.find({listId: currentList}).count();
 		},
 		'completedTodos' : function() {
-			return Todos.find({completed: true}).count();
+			var currentList = this._id;
+			return Todos.find({listId: currentList, completed: true}).count();
 		}
 	});
 
@@ -74,6 +93,53 @@ if(Meteor.isClient){
 			}
 		}
 	});
-		
 
+	Template.addList.events({
+		'submit form': function(event){
+			event.preventDefault();
+			var listName = $('[name=listName]').val();
+			Lists.insert({
+				name: listName
+				}, function(error, results) {
+					Router.go('listPage', {_id : results});
+			});
+			$('[name=listName]').val('');
+		}
+	});
+		
+	Template.lists.helpers({
+		'list' : function(){
+			return Lists.find({}, {sort: {name: 1}});
+		}
+	});
+
+	Template.register.events({
+		'submit form': function(){
+			event.preventDefault();
+			var email = $('[name=email]').val();
+			var password = $('[name=password]').val();
+			Accounts.createUser({
+				email: email,
+				password: password
+			});
+			Router.go('home');
+		}
+	});
+
+	Template.navigation.events({
+		'click .logout': function(event){	
+			event.preventDefault();
+			Meteor.logout();
+			Router.go('login');
+		}
+	});
+
+	Template.login.events({
+		'submit form' : function(event){
+			event.preventDefault();
+			var email = $('[name=email]').val();
+			var password = $('[name=password]').val();
+			Meteor.loginWithPassword(email, password);
+		}
+	});
 }
