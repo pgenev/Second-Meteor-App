@@ -7,6 +7,8 @@ The basic idea is that the users can create their own lists with list items. Eve
 completed.
 The app has an accounts system that allows users to register, login and logout.
 
+![Todos](/img/todos.jpg)
+
 ## Link to the source
 
 [Second Meteor App](http://meteortips.com/second-meteor-tutorial/)
