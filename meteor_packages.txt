@@ -1,0 +1,15 @@
+accounts-password                1.1.13* Password support for accounts
+blaze-html-templates             1.0.4  Compile HTML templates into reactive UI with Meteor Blaze
+check                            1.2.3  Check whether a value matches a pattern
+ecmascript                       0.4.8* Compiler plugin that supports ES2015+ in all .js files
+es5-shim                         4.5.13* Shims and polyfills to improve ECMAScript 5 support
+iron:router                      1.0.13  Routing specifically designed for Meteor
+jquery                           1.11.9  Manipulate the DOM using CSS selectors
+meteor-base                      1.0.4  Packages that every Meteor app needs
+mobile-experience                1.0.4  Packages for a great mobile user experience
+mongo                            1.1.9_1* Adaptor for using MongoDB and Minimongo over DDP
+reactive-var                     1.0.10  Reactive variable
+standard-minifier-css            1.0.8* Standard css minifier used with Meteor apps by default.
+standard-minifier-js             1.0.8* Standard javascript minifiers used with Meteor apps by default.
+themeteorchef:jquery-validation  1.14.0  jQuery Validation by jzaefferer, repackaged for Meteor.
+tracker  
