@@ -1,11 +1,15 @@
 Router.configure({
 	layoutTemplate: 'main'
+	//layoutTemplate: 'loading'
 });
 Router.route('/register');
 Router.route('/login');
 Router.route('/' , { 
 	name: 'home', 
 	template: 'home'
+	//subscriptions: function(){
+	//	return [Meteor.subscribe('lists'), Meteor.subscribe('todos', currentList)]
+	//}
 });
 Router.route('/list/:_id', {
 	name: 'listPage',
@@ -24,12 +28,12 @@ Router.route('/list/:_id', {
 		}
 	},
 	subscriptions: function(){
-		return Meteor.subscribe('todos');
+		var currentList = this.params._id;
+		return Meteor.subscribe('todos', currentList)
 	}
 });
 
 if(Meteor.isClient){
-	Meteor.subscribe('lists');
 	//Meteor.subscribe('todos');
 
 	Template.todos.helpers({
@@ -45,6 +49,7 @@ if(Meteor.isClient){
 			event.preventDefault();
 			var todoName = $('[name="todoName"]').val();
 			var currentList = this._id;
+			/*
 			var createUser = Meteor.userId();
 			Todos.insert({
 				name: todoName,
@@ -54,6 +59,15 @@ if(Meteor.isClient){
 				createdBy: createUser
 			});
 			$('[name="todoName"]').val('');
+			*/
+			Meteor.call('createListItem', todoName, currentList, function(error){
+				if(error)
+				{
+					console.log(error.reason);
+				} else {
+					$('[name="todoName"]').val('');
+				}
+			});
 		}
 	});
 
@@ -85,7 +99,8 @@ if(Meteor.isClient){
 			var documentId = this._id;
 			var confirm = window.confirm("Delete the task?");
 			if(confirm){
-				Todos.remove({ _id: documentId});
+				//Todos.remove({ _id: documentId});
+				Meteor.call('removeListItem', documentId);
 			}
 		},
 		'keyup [name=todoItem]': function(event){
@@ -95,7 +110,8 @@ if(Meteor.isClient){
 			    else{
 			    	var documentId = this._id;
 					var todoItem = $(event.target).val();
-					Todos.update({ _id: documentId}, {$set: {name: todoItem}});
+					//Todos.update({ _id: documentId}, {$set: {name: todoItem}});
+					Meteor.call('updateListItem', documentId, todoItem);
 				}
 
 		},
@@ -103,11 +119,13 @@ if(Meteor.isClient){
 			var documentId = this._id;
 			var isCompleted = this.completed;
 			if(isCompleted){
-				Todos.update({ _id: documentId}, {$set: {completed: false}})
-				console.log("Task marked as incomplete.");
+				//Todos.update({ _id: documentId}, {$set: {completed: false}})
+				//console.log("Task marked as incomplete.");
+				Meteor.call('changeItemStatus', documentId, false);
 			} else {
-				Todos.update({ _id: documentId}, {$set: {completed: true}})
-				console.log("Task marked as completed.");
+				//Todos.update({ _id: documentId}, {$set: {completed: true}})
+				//console.log("Task marked as completed.");
+				Meteor.call('changeItemStatus', documentId, true);
 			}
 		}
 	});
@@ -116,6 +134,7 @@ if(Meteor.isClient){
 		'submit form': function(event){
 			event.preventDefault();
 			var listName = $('[name=listName]').val();
+			/*
 			var createUser = Meteor.userId();
 			Lists.insert({
 				name: listName,
@@ -124,6 +143,15 @@ if(Meteor.isClient){
 					Router.go('listPage', {_id : results});
 			});
 			$('[name=listName]').val('');
+		*/
+			Meteor.call('createNewList', listName, function(error, results) {
+				if(error){
+					console.log(error.reason);
+				} else {
+					Router.go('listPage', {_id: results});
+					$('[name="listName"]').val('');
+				}
+			});
 		}
 	});
 		
@@ -259,6 +287,10 @@ if(Meteor.isClient){
 					minlength: "Your password must be at least {0} characters."
 				}
 			}	
+	});
+
+	Template.lists.onCreated(function() {
+		this.subscribe('lists');
 	});
 }
 
